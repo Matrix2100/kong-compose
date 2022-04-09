@@ -48,10 +48,10 @@ services:
       KONG_PROXY_LISTEN_SSL: 0.0.0.0:8001, 0.0.0.0:8444 ssl
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
       # ssl config
-      KONG_SSL_CERT: /kong/server.crt
-      KONG_SSL_CERT_KEY: /kong/server.key
-      KONG_ADMIN_SSL_CERT: /kong/server.crt
-      KONG_ADMIN_SSL_CERT_KEY: /kong/server.key
+      KONG_SSL_CERT: /certs/server.crt
+      KONG_SSL_CERT_KEY: /certs/server.key
+      KONG_ADMIN_SSL_CERT: /certs/server.crt
+      KONG_ADMIN_SSL_CERT_KEY: /certs/server.key
       KONG_SSL: "on"
     depends_on:
       - kong-migration
@@ -67,7 +67,7 @@ services:
       - "15443:8443"
       - "15444:8444"
     volumes:
-      - ./kong:/kong
+      - ./certs:/certs
 
   #######################################
   # Konga database prepare
