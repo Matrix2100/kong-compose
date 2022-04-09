@@ -13,7 +13,7 @@ services:
       POSTGRES_DB: kong
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "5433:5432"
+      - "15433:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kong"]
       interval: 5s
@@ -44,28 +44,28 @@ services:
     restart: always
     environment:
       KONG_PG_HOST: kong-database
-      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
-      KONG_PROXY_LISTEN_SSL: 0.0.0.0:8001, 0.0.0.0:8444 ssl
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_PROXY_LISTEN: 0.0.0.0:15000, 0.0.0.0:15443 ssl
+      KONG_PROXY_LISTEN_SSL: 0.0.0.0:15001, 0.0.0.0:15444 ssl
+      KONG_ADMIN_LISTEN: 0.0.0.0:15001
       # ssl config
-      KONG_SSL_CERT: /certs/server.crt
-      KONG_SSL_CERT_KEY: /certs/server.key
-      KONG_ADMIN_SSL_CERT: /certs/server.crt
-      KONG_ADMIN_SSL_CERT_KEY: /certs/server.key
+      # KONG_SSL_CERT: /certs/server.crt
+      # KONG_SSL_CERT_KEY: /certs/server.key
+      # KONG_ADMIN_SSL_CERT: /certs/server.crt
+      # KONG_ADMIN_SSL_CERT_KEY: /certs/server.key
       KONG_SSL: "on"
     depends_on:
       - kong-migration
       - kong-database
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://kong:8001"]
+      test: ["CMD", "curl", "-f", "http://kong:15001"]
       interval: 5s
       timeout: 2s
       retries: 15
     ports:
-      - "8001:8001"
-      - "8000:8000"
-      - "8443:8443"
-      - "8444:8444"
+      - "15001:8001"
+      - "15000:8000"
+      - "15443:8443"
+      - "15444:8444"
     volumes:
       - ./kong:/kong
 
@@ -74,7 +74,7 @@ services:
   #######################################
   konga-prepare:
     image: pantsel/konga:latest
-    command: "-c prepare -a postgres -u postgresql://kong@kong-database:5432/konga_db"
+    command: "-c prepare -a postgres -u postgresql://kong@kong-database:15432/konga_db"
     restart: on-failure
     links:
       - kong-database
@@ -97,7 +97,7 @@ services:
     depends_on:
       - kong-database
     ports:
-      - "1337:1337"
+      - "15337:1337"
 networks:
   default:
     external:
